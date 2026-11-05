@@ -1,0 +1,22 @@
+name: Fix or update an entry
+description: Report a broken link, wrong date, archived repo, or a new benchmark score.
+title: "[Fix] "
+labels: ["fix-entry"]
+body:
+  - type: input
+    id: name
+    attributes:
+      label: Entry name (as listed)
+    validations:
+      required: true
+  - type: textarea
+    id: change
+    attributes:
+      label: What should change?
+      placeholder: "e.g. repo moved to https://github.com/new/location, or XBOW benchmark score is 85%"
+    validations:
+      required: true
+  - type: input
+    id: source
+    attributes:
+      label: Source for the change (link)

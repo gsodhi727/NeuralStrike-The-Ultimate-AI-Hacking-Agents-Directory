@@ -1,0 +1,47 @@
+name: Validate list
+
+on:
+  push:
+    branches: [main]
+    paths: ["README.md", "tools/**", "data/**", ".github/workflows/validate.yml"]
+  pull_request:
+    paths: ["README.md", "tools/**", "data/**", ".github/workflows/validate.yml"]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Check agent tables
+        run: python3 tools/agents.py check
+      - name: data/agents.csv matches README
+        run: |
+          python3 tools/agents.py csv
+          git diff --exit-code data/agents.csv \
+            || { echo "::error::data/agents.csv is out of date — run: python3 tools/agents.py csv"; exit 1; }
+
+  links:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Check links
+        uses: lycheeverse/lychee-action@v2
+        with:
+          # CodeWiki/DeepWiki pages are generated on request and often pending,
+          # so they're skipped. 403/429 = bot-blocking or rate limits, not dead links.
+          args: >-
+            --no-progress --max-concurrency 8
+            --accept 200,206,403,429
+            --exclude 'codewiki\.google' --exclude 'deepwiki\.com'
+            README.md
+          # Report only (see the job summary); don't block a PR on someone else's site.
+          fail: false
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
