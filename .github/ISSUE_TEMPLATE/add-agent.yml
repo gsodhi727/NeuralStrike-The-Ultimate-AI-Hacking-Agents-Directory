@@ -1,0 +1,58 @@
+name: Add an AI hacking agent
+description: Suggest an open-source or commercial AI hacking agent for the directory.
+title: "[Add] "
+labels: ["new-agent"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for contributing! Only tools meant for **authorised** security testing, research or education are listed.
+        Please check the README first so we don't add duplicates.
+  - type: input
+    id: name
+    attributes:
+      label: Name
+      placeholder: e.g. PentestGPT
+    validations:
+      required: true
+  - type: input
+    id: url
+    attributes:
+      label: Repository or website URL
+      placeholder: https://github.com/owner/repo
+    validations:
+      required: true
+  - type: dropdown
+    id: kind
+    attributes:
+      label: Type
+      options:
+        - Open source
+        - Enterprise / closed source
+        - Paper (arXiv etc.)
+        - Competition entry (AIxCC, Tencent, ...)
+    validations:
+      required: true
+  - type: input
+    id: date
+    attributes:
+      label: Created / published date
+      description: Repo creation date or paper date, as YYYY-MM-DD (or YYYY-MM).
+      placeholder: 2025-06-01
+  - type: input
+    id: paper
+    attributes:
+      label: Paper link (if any)
+      placeholder: https://arxiv.org/abs/...
+  - type: textarea
+    id: notes
+    attributes:
+      label: Short description / notes
+      description: One or two sentences — what it does, benchmark scores, anything notable.
+  - type: checkboxes
+    id: checks
+    attributes:
+      label: Checks
+      options:
+        - label: I searched the README and this agent is not listed yet.
+          required: true
